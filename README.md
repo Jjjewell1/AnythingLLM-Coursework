@@ -3,6 +3,20 @@
 Self-hosted RAG (Retrieval-Augmented Generation) assistant for college coursework.
 Uses [AnythingLLM](https://github.com/Mintplex-Labs/anything-llm) with Ollama as the LLM and embedding backend.
 
+## Status: ✅ LIVE
+
+| Piece | Value |
+|---|---|
+| **Deployed via** | Coolify (GitHub-based build) |
+| **URL** | `https://study.jewellcore.com` (HTTP 200, API ping `{"online":true}`) |
+| **GitHub repo** | `Jjjewell1/AnythingLLM-Coursework` (branch `main`) |
+| **Coolify app** | `qug6cml5i8fumqus82pmb101` |
+| **Container port** | 3001 (internal only, Traefik routes externally) |
+| **Cloudflare** | Tunnel ingress `study.jewellcore.com → http://localhost:80` + proxied DNS CNAME on tunnel `88da47d7` |
+| **LLM** | Ollama on Windows PC (`192.168.1.199:11434`, model `qwen2.5:7b-instruct`) |
+| **Embeddings** | Ollama (`nomic-embed-text:latest`) |
+| **Vector DB** | LanceDB (built-in, stored in named volume) |
+
 ## Infrastructure
 
 | Piece | Value |
@@ -55,11 +69,12 @@ Go to the application's **Environment Variables** tab and set these:
 
 | Variable | Value | Notes |
 |---|---|---|
-| `OLLAMA_BASE_URL` | `http://<YOUR_WINDOWS_PC_LAN_IP>:11434` | **REQUIRED** — Replace with your Windows PC's LAN IP (e.g. `http://192.168.1.50:11434`) |
-| `JWT_SECRET` | `<RANDOM_32_CHAR_STRING>` | **REQUIRED** — Generate with: `openssl rand -hex 32` |
+| `OLLAMA_BASE_URL` | `http://192.168.1.199:11434` | Windows PC LAN IP — enables remote server binding (`192.168.1.199`) |
+| `JWT_SECRET` | `<RANDOM_32_CHAR_STRING>` | Generate with: `openssl rand -hex 32` |
 
 > All other env vars (LLM provider, model names, embedding config, vector DB) are already set in the compose file.
 > The `OLLAMA_BASE_URL` is interpolated into both `OLLAMA_BASE_PATH` and `EMBEDDING_BASE_PATH`.
+> Ollama on the PC must be started with `OLLAMA_HOST=0.0.0.0` (see Prerequisites) or it will only listen on localhost and AnythingLLM won't connect.
 
 ### 4. Set the Domain (after first deploy)
 
