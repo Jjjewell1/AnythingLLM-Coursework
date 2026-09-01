@@ -1,0 +1,35 @@
+services:
+  anythingllm:
+    image: mintplexlabs/anythingllm:latest
+    restart: unless-stopped
+    cap_add:
+      - SYS_ADMIN
+    networks:
+      - coolify
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=coolify
+      - traefik.http.routers.anythingllm.rule=Host(`study.jewellcore.com`)
+      - traefik.http.routers.anythingllm.entrypoints=http
+      - traefik.http.services.anythingllm.loadbalancer.server.port=3001
+    environment:
+      - STORAGE_DIR=/app/server/storage
+      - JWT_SECRET=${JWT_SECRET}
+      - LLM_PROVIDER=ollama
+      - OLLAMA_BASE_PATH=${OLLAMA_BASE_URL}
+      - OLLAMA_MODEL_PREF=qwen2.5:7b-instruct
+      - OLLAMA_MODEL_TOKEN_LIMIT=4096
+      - EMBEDDING_ENGINE=ollama
+      - EMBEDDING_BASE_PATH=${OLLAMA_BASE_URL}
+      - EMBEDDING_MODEL_PREF=nomic-embed-text:latest
+      - EMBEDDING_MODEL_MAX_CHUNK_LENGTH=8192
+      - VECTOR_DB=lancedb
+    volumes:
+      - anythingllm_data:/app/server/storage
+
+volumes:
+  anythingllm_data: {}
+
+networks:
+  coolify:
+    external: true

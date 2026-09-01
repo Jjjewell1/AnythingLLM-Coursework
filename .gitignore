@@ -1,0 +1,11 @@
+# Environment and secrets
+.env
+.env.*
+
+# AnythingLLM local storage (persisted via Docker volume, not git)
+storage/
+data/
+
+# OS files
+.DS_Store
+Thumbs.db
