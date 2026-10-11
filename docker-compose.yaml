@@ -16,6 +16,7 @@ services:
       - STORAGE_DIR=/app/server/storage
       - JWT_SECRET=${JWT_SECRET}
       - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_EMBEDDING_API_KEY=${GEMINI_EMBEDDING_API_KEY}
       - LLM_PROVIDER=gemini
       - GEMINI_LLM_MODEL_PREF=gemini-3.5-flash
       - EMBEDDING_ENGINE=gemini
